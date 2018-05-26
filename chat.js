@@ -3,20 +3,18 @@ const clear = require('clear'); //clears the terminal screen
 const figlet = require('figlet'); //creates ASCII art from text
 const CLI = require('clui');
 const Spinner = CLI.Spinner;
-const ora = require('ora'); //https://github.com/sindresorhus/cli-spinners/blob/master/spinners.json
+
+const readline = require('readline');
+const validator = require('validator');
 //https://www.smashingmagazine.com/2017/03/interactive-command-line-application-node-js/
 //https://scotch.io/tutorials/build-an-interactive-command-line-application-with-nodejs
 //https://www.sitepoint.com/javascript-command-line-interface-cli-node-js/
 //https://github.com/tj/commander.js/
 //https://appliedgo.net/tui/
 //https://github.com/yaronn/blessed-contrib
-//Login Credentials
 const inquirer = require('./lib/inquirer');
-
-//Firebase
 const database = require("./lib/database");
-const readline = require('readline');
-const validator = require('validator');
+const account = require("./lib/account");
 
 function writeDone(data){
     console.log(chalk.green(data));
@@ -46,10 +44,15 @@ const run = async () => {
     var myName = "Joe";
     //Sign in ===>
     try {
-        //const currUser = await database.getUser();
-        //console.log(currUser);
-        //process.exit(1);
-        /*const cred = await inquirer.askLoginCredentials();
+        const user = await account.getInstance();
+        console.log(user);
+        if(!user){
+            const newuser = await inquirer.newUser();
+            const userAction = await account.userAction(newuser.newuser);
+            console.log(userAction);
+        }
+        process.exit(1);
+        const cred = await inquirer.askLoginCredentials();
         if (!(validator.isEmail(cred.email))) {
             writeError(`'${cred.email}' is not a valid email address`);
             process.exit(1);
@@ -63,7 +66,7 @@ const run = async () => {
         const signup = await database.signUp(cred.email, cred.password);
         console.log(signup.user);
         loader.stop();
-        //process.exit(1);*/
+        process.exit(1);
         const aim = await inquirer.askAim();
         if (aim.aim === "Join Group") {
             const groups = await database.getGroups();
@@ -73,16 +76,6 @@ const run = async () => {
                 //Online Notification
                 const chat = await database.getChats(group.name);
                 gropName = group.name;
-                /*readline.emitKeypressEvents(process.stdin);
-                process.stdin.setRawMode(true);
-                process.stdin.on('keypress', (str, key) => {
-                    if (key.ctrl && key.name === 'c') {
-                        process.exit();
-                    } else {
-                        //Typing status
-                        process.stdin
-                    }
-                });*/
                 const input = readline.createInterface({
                     input: process.stdin
                 })
@@ -91,15 +84,7 @@ const run = async () => {
                         sender: myName,
                         message: message
                     }
-                    process.readline.clearLine();
-                    //readline.clearLine(,-1)
                     const send = await database.sendMessage(gropName, message);
-                });
-                input.on('SIGINT', function () {
-                    console.log('Out');
-                    input.question('Are you sure you want to exit?', function (answer) {
-                        if (answer.match(/^y(es)?$/i)) input.pause();
-                    });
                 });
             }
         } else {
