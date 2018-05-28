@@ -3,7 +3,7 @@
 Node is a great choice for building command line tools. 
 This is a chat build with NODE.js.
 
-Article URL: https://joemags.co.zw
+Article URL: https://joemags.co.zw/cli-chat
 
 ## Requirements
 
