@@ -8,9 +8,12 @@
   },
   "author": "MJ",
   "license": "ISC",
+  "preferGlobal": true,
+  "bin": {
+    "gzu": "./chat.js"
+  },
   "dependencies": {
     "blessed": "^0.1.81",
-    "bluebird": "^3.5.1",
     "chalk": "^2.4.1",
     "clear": "^0.1.0",
     "clui": "^0.3.6",
@@ -20,8 +23,8 @@
     "figlet": "^1.2.0",
     "firebase": "^5.0.3",
     "inquirer": "^5.2.0",
+    "moment": "^2.22.1",
     "readline": "^1.3.0",
-    "telnet2": "0.0.1",
     "terminal-kit": "^1.17.5",
     "validator": "^10.2.0"
   }
